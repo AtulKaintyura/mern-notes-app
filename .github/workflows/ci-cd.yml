@@ -1,14 +1,26 @@
+name: CI/CD Pipeline for MERN App
+
+on:
+  push:
+    branches:
+      - main  # Change this if your deployment branch is different
+  pull_request:
+    branches:
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      
-      - name: Use Node.js 16
+
+      - name: Set up Node.js 16
         uses: actions/setup-node@v3
         with:
           node-version: 16
+          cache: "npm"
 
       - name: Install dependencies
         run: npm install
@@ -16,5 +28,35 @@ jobs:
       - name: Set OpenSSL Legacy Provider
         run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
 
-      - name: Build project
+      - name: Run Tests
+        run: npm test
+
+      - name: Build Project
         run: npm run build
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build/
+  
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: build/
+
+      # If deploying to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build

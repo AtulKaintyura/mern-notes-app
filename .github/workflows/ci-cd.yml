@@ -34,11 +34,12 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      - name: Upload Build Artifacts  # 🔥 Fix: Ensure correct artifact upload
-        uses: actions/upload-artifact@v3
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
         with:
-          name: build-artifact
-          path: build/
+           name: build-artifact
+           path: build/
+
 
   deploy:
     needs: build
@@ -48,8 +49,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Download Build Artifacts  # 🔥 Fix: Ensure correct artifact download
-        uses: actions/download-artifact@v3
+      - name: Download Build Artifacts  
+        uses: actions/download-artifact@v4
         with:
           name: build-artifact
           path: build/
@@ -59,3 +60,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
+
+      - name: Clear GitHub Actions Cache
+        run: rm -rf ~/.npm ~/.cache
+

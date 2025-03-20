@@ -1,32 +1,20 @@
-name: MERN App CI/CD
-
-on:
-  push:
-    branches:
-      - main
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Check Node.js Version
-        run: node -v
-
-
-      - name: Install Node.js
+      
+      - name: Use Node.js 16
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
 
-      - name: Set Environment Variable for OpenSSL
+      - name: Set OpenSSL Legacy Provider
         run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
 
-      - name: Build Project
+      - name: Build project
         run: npm run build

@@ -13,13 +13,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Check Node.js Version
+        run: node -v
+
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18  # Use your project's Node.js version
+          node-version: 18
 
       - name: Install Dependencies
         run: npm install
+
+      - name: Set Environment Variable for OpenSSL
+        run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
 
       - name: Build Project
         run: npm run build

@@ -1,9 +1,8 @@
 # React Notes App
-By: Payden Dyer
 
 Web App that can add and delete notes
 
-https://paydendyer.github.io/react-notes-app
+
 ## Technology Used:
 1. React.js
 2. CSS Grid
@@ -18,5 +17,3 @@ After cloning the respository, run npx start in the terminal
 ## Known Bugs:
 None
 
-## License
-Payden Dyer 2/14/2022
